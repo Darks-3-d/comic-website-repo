@@ -1,38 +1,41 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // This is the hardcoded path to your comic's chapters.
-    const comicChaptersPath = `Comics/Star-Embracing%20Swordmaster/`;
-    
+    const params = new URLSearchParams(window.location.search);
+    const comicName = params.get('comic');
+
+    if (!comicName) return;
+
     const chaptersListBody = document.getElementById('chapters-list-body');
-
+    const comicRepo = `https://raw.githubusercontent.com/Darks-3-d/${comicName}/main/`;
+    
     try {
-        const response = await fetch(comicChaptersPath);
-        
-        if (!response.ok) {
-            throw new Error('Failed to fetch chapters.');
+        // Fetch the comic_info.json to get the chapter count
+        const infoResponse = await fetch(`${comicRepo}comic_info.json`);
+        if (!infoResponse.ok) {
+            throw new Error('Failed to fetch comic info.');
         }
+        const comicInfo = await infoResponse.json();
 
-        const data = await response.text();
-        const parser = new DOMParser();
-        const htmlDoc = parser.parseFromString(data, 'text/html');
-        
-        const chapterFolders = Array.from(htmlDoc.querySelectorAll('a'))
-                                    .map(a => a.getAttribute('href'))
-                                    .filter(href => href.endsWith('/'))
-                                    .map(href => href.slice(0, -1))
-                                    .filter(name => name !== '..');
+        // Update the page title and synopsis
+        document.getElementById('page-title').textContent = comicInfo.title;
+        document.getElementById('comic-title-placeholder').textContent = comicInfo.title;
+        document.getElementById('comic-synopsis-placeholder').textContent = comicInfo.synopsis;
 
         chaptersListBody.innerHTML = '';
+        for (let i = 1; i <= comicInfo.chapters; i++) {
+            const chapterNumber = String(i).padStart(2, '0');
+            const chapterName = `Chapter ${chapterNumber}`;
 
-        if (chapterFolders.length === 0) {
-            chaptersListBody.innerHTML = '<tr><td>No chapters found.</td></tr>';
-        } else {
-            chapterFolders.forEach(chapter => {
-                const row = document.createElement('tr');
-                // The link now points to reader.html with the exact chapter name from your repository
-                row.innerHTML = `<td><a href="reader.html?comic=Star-Embracing%20Swordmaster&chapter=${encodeURIComponent(chapter)}">${chapter}</a></td><td></td>`;
-                chaptersListBody.appendChild(row);
-            });
+            const row = document.createElement('tr');
+            const link = document.createElement('a');
+            link.textContent = chapterName;
+            link.href = `reader.html?comic=${comicName}&chapter=${encodeURIComponent(chapterName)}`;
+            
+            const cell = document.createElement('td');
+            cell.appendChild(link);
+            row.appendChild(cell);
+            chaptersListBody.appendChild(row);
         }
+
     } catch (error) {
         console.error('Error loading chapters:', error);
         chaptersListBody.innerHTML = '<tr><td>Could not load chapters. Please try again later.</td></tr>';
