@@ -16,8 +16,8 @@ async function loadChapterImages(comicRepo, chapterName) {
 
     const GITHUB_RAW_URL = comicRepo;
 
-    // We assume the image format is AVIF.
-    const imageFormat = 'avif';
+    // We assume the image format is WebP.
+    const imageFormat = 'webp';
     const maxPagesToCheck = 100;
 
     for (let i = 1; i <= maxPagesToCheck; i++) {
