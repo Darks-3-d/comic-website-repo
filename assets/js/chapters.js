@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // This is now a hardcoded RELATIVE path to your comic's chapters within this repository.
+    // This is the hardcoded path to your comic's chapters.
     const comicChaptersPath = `Comics/Star-Embracing%20Swordmaster/`;
     
     const chaptersListBody = document.getElementById('chapters-list-body');
 
     try {
-        // Fetch the directory listing for the comic's chapters using the relative path
         const response = await fetch(comicChaptersPath);
         
         if (!response.ok) {
@@ -29,11 +28,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             chapterFolders.forEach(chapter => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td><a href="reader.html?chapter=${chapter}">${chapter}</a></td><td></td>`;
+                // The link now points to reader.html with the exact chapter name from your repository
+                row.innerHTML = `<td><a href="reader.html?comic=Star-Embracing%20Swordmaster&chapter=${encodeURIComponent(chapter)}">${chapter}</a></td><td></td>`;
                 chaptersListBody.appendChild(row);
             });
         }
-
     } catch (error) {
         console.error('Error loading chapters:', error);
         chaptersListBody.innerHTML = '<tr><td>Could not load chapters. Please try again later.</td></tr>';
