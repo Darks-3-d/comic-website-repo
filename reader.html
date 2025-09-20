@@ -1,38 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="theme-color" content="#2b2f33" />
-  <title>Comic Title 1 | Chapter 1 | My Comics</title>
-  <meta name="viewport" content="width=device-width">
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-  <link rel="stylesheet" href="assets/css/main.css">
-  <style>
-    body { background-color: #121212 !important; color: #e0e0e0; }
-    .reader-container img {
-      width: 100%;
-      height: auto;
-      display: block;
-      margin: 0 auto;
+// A new, automated JavaScript file for a static comic reader.
+
+// This function loads images sequentially based on a predictable pattern.
+async function loadChapterImages(comicRepo, chapterName) {
+    const readerContainer = document.querySelector('.rdr-image-wrap');
+    if (!readerContainer) {
+        return;
     }
-  </style>
-</head>
-<body>
-  <main id="rdr-main" tabindex="-1">
-    <aside class="unload">
-      <header>
-        <a href="index.html" class="ico-btn guya"></a>
-        <h1 data-bind='title'><a href="comics.html">Comic Title 1</a></h1>
-      </header>
-      </aside>
-    <content data-bind='image_viewer' class="rdr-area">
-      <div class="rdr-image-wrap" data-bind='image_container' tabindex="-1">
-        <img src="https://via.placeholder.com/800x1200?text=Page+1" alt="Chapter 1, Page 1" />
-        <img src="https://via.placeholder.com/800x1200?text=Page+2" alt="Chapter 1, Page 2" />
-        <img src="https://via.placeholder.com/800x1200?text=Page+3" alt="Chapter 1, Page 3" />
-      </div>
-    </content>
-  </main>
-  <script src="assets/js/jquery.min.js"></script>
-</body>
-</html>
+    readerContainer.innerHTML = '';
+
+    const GITHUB_RAW_URL = comicRepo;
+
+    // We can assume the image format and file count are consistent.
+    // Let's assume all images are in .webp format and we'll check up to 100 pages.
+    const imageFormat = 'webp'; // Change this if your images are in .avif, .jpg, etc.
+    const maxPagesToCheck = 100;
+
+    for (let i = 1; i <= maxPagesToCheck; i++) {
+        const imageNumber = String(i).padStart(2, '0');
+        const imageUrl = `${GITHUB_RAW_URL}comics/${chapterName}/${imageNumber}.${imageFormat}`;
+
+        try {
+            const response = await fetch(imageUrl, { method: 'HEAD' });
+
+            if (response.status === 200) {
+                // If the file exists, create the image element and add it to the page
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = `Chapter ${chapterName}, Page ${imageNumber}`;
+                readerContainer.appendChild(img);
+            } else {
+                // If a file is not found, we assume we have reached the end of the chapter
+                break;
+            }
+        } catch (error) {
+            console.error('Error fetching image:', error);
+            break;
+        }
+    }
+}
+
+// Check the current page and execute the appropriate function
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const comicRepo = 'https://raw.githubusercontent.com/YOUR_USERNAME/my-first-comic/main/';
+    const chapterName = params.get('chapter');
+    
+    if (document.title.includes('Chapter') && chapterName) {
+        const titleElement = document.querySelector('h1 a');
+        if (titleElement) {
+             titleElement.textContent = `Chapter ${chapterName}`;
+        }
+        loadChapterImages(comicRepo, chapterName);
+    }
+});
