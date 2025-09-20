@@ -1,5 +1,4 @@
-// A conceptual JavaScript file for a static version of the website.
-// This is not in the provided archives but is necessary for a static site.
+// A new, automated JavaScript file for a static comic reader.
 
 // Function to get query parameters from the URL
 function getUrlParams() {
@@ -7,7 +6,7 @@ function getUrlParams() {
     return Object.fromEntries(params.entries());
 }
 
-// Function to fetch and display comic images
+// Function to load and display comic images
 async function loadChapterImages(comicRepo, chapterName) {
     const readerContainer = document.querySelector('.rdr-image-wrap');
     if (!readerContainer) {
@@ -17,20 +16,25 @@ async function loadChapterImages(comicRepo, chapterName) {
 
     const GITHUB_RAW_URL = comicRepo;
 
-    // We assume images are named sequentially (e.g., 01.jpg, 02.jpg)
-    for (let i = 1; i < 100; i++) {
+    // We assume the image format is AVIF.
+    const imageFormat = 'avif';
+    const maxPagesToCheck = 100;
+
+    for (let i = 1; i <= maxPagesToCheck; i++) {
         const imageNumber = String(i).padStart(2, '0');
-        const imageUrl = `${GITHUB_RAW_URL}comics/${chapterName}/${imageNumber}.jpg`;
+        const imageUrl = `${GITHUB_RAW_URL}comics/${chapterName}/${imageNumber}.${imageFormat}`;
 
         try {
-            const response = await fetch(imageUrl);
+            const response = await fetch(imageUrl, { method: 'HEAD' });
+
             if (response.status === 200) {
+                // If the file exists, create the image element and add it to the page
                 const img = document.createElement('img');
                 img.src = imageUrl;
                 img.alt = `Chapter ${chapterName}, Page ${imageNumber}`;
                 readerContainer.appendChild(img);
             } else {
-                // Stop when an image file is not found (e.g., 404)
+                // If a file is not found (e.g., a 404 error), we assume we've reached the end of the chapter
                 break;
             }
         } catch (error) {
@@ -43,16 +47,14 @@ async function loadChapterImages(comicRepo, chapterName) {
 // Check the current page and execute the appropriate function
 document.addEventListener('DOMContentLoaded', () => {
     const params = getUrlParams();
-    if (document.title.includes('Chapter')) {
-        const comicRepo = 'https://raw.githubusercontent.com/YOUR_USERNAME/your-comic-repo/main/';
-        const chapterName = params.chapter;
-        if (comicRepo && chapterName) {
-            // Update the title of the reader page
-            const titleElement = document.querySelector('h1 a');
-            if (titleElement) {
-                 titleElement.textContent = `Chapter ${chapterName}`;
-            }
-            loadChapterImages(comicRepo, chapterName);
+    const comicRepo = 'https://raw.githubusercontent.com/YOUR_USERNAME/my-first-comic/main/';
+    const chapterName = params.get('chapter');
+    
+    if (document.title.includes('Chapter') && chapterName) {
+        const titleElement = document.querySelector('h1 a');
+        if (titleElement) {
+             titleElement.textContent = `Chapter ${chapterName}`;
         }
+        loadChapterImages(comicRepo, chapterName);
     }
 });
