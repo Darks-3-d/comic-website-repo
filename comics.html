@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read Comic Title 1 | My Comics</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        .page-series {
+            background-color: black !important;
+            color: #e0e0e0;
+        }
+        .series-content img {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="index.html" class="logo">My Comics</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Genres</a></li>
+                <li><a href="#">Bookmarks</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container-fluid page-series">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-7 col-sm-11 col-xs-12 series-content">
+                <article>
+                    <h1>Comic Title 1</h1>
+                    <img src="https://via.placeholder.com/400x600" alt="Comic Title 1 cover" class="img-fluid">
+                    <p>
+                        This is the synopsis for Comic Title 1. It is a fantastic story filled with action and adventure.
+                    </p>
+                </article>
+                <div id="detailedView" class="table-responsive">
+                    <table id="chapters" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Last Updated</th>
+                                <th>Views</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="reader.html?comic=comic1&chapter=1">Chapter 1</a></td>
+                                <td>1 day ago</td>
+                                <td>1500</td>
+                            </tr>
+                            <tr>
+                                <td><a href="reader.html?comic=comic1&chapter=2">Chapter 2</a></td>
+                                <td>5 hours ago</td>
+                                <td>300</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; 2024 My Comics. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/jquery.min.js"></script>
+</body>
+</html>

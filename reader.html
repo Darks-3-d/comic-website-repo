@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="#2b2f33" />
+  <title>Comic Title 1 | Chapter 1 | My Comics</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    body { background-color: #121212 !important; color: #e0e0e0; }
+    .reader-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <main id="rdr-main" tabindex="-1">
+    <aside class="unload">
+      <header>
+        <a href="index.html" class="ico-btn guya"></a>
+        <h1 data-bind='title'><a href="comics.html">Comic Title 1</a></h1>
+      </header>
+      </aside>
+    <content data-bind='image_viewer' class="rdr-area">
+      <div class="rdr-image-wrap" data-bind='image_container' tabindex="-1">
+        <img src="https://via.placeholder.com/800x1200?text=Page+1" alt="Chapter 1, Page 1" />
+        <img src="https://via.placeholder.com/800x1200?text=Page+2" alt="Chapter 1, Page 2" />
+        <img src="https://via.placeholder.com/800x1200?text=Page+3" alt="Chapter 1, Page 3" />
+      </div>
+    </content>
+  </main>
+  <script src="assets/js/jquery.min.js"></script>
+</body>
+</html>

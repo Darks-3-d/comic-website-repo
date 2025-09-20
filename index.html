@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Comics</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        .main-container {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .comics-grid-container {
+            flex: 3;
+        }
+        .comics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .comic-card {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .comic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+        .comic-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        .comic-info {
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .comic-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="index.html" class="logo">My Comics</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Genres</a></li>
+                <li><a href="#">Bookmarks</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="comics-grid-container">
+            <h2 class="section-title">Latest Updates</h2>
+            <div id="comics-grid" class="comics-grid">
+                <a href="comics.html" class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Comic 1">
+                    <div class="comic-info">
+                        <p class="comic-title">Comic Title 1</p>
+                        <p class="comic-chapter">Chapter 1</p>
+                    </div>
+                </a>
+                <a href="comics.html" class="comic-card">
+                    <img src="https://via.placeholder.com/200x300" alt="Comic 2">
+                    <div class="comic-info">
+                        <p class="comic-title">Comic Title 2</p>
+                        <p class="comic-chapter">Chapter 1</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>&copy; 2024 My Comics. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/jquery.min.js"></script>
+</body>
+</html>
