@@ -1,40 +1,34 @@
-// A new, automated JavaScript file for a static comic reader.
+// A simplified reader.js file for a single-repo website.
 
-// Function to get query parameters from the URL
 function getUrlParams() {
     const params = new URLSearchParams(window.location.search);
     return Object.fromEntries(params.entries());
 }
 
-// Function to load and display comic images
-async function loadChapterImages(comicRepo, chapterName) {
+async function loadChapterImages(comicName, chapterName) {
     const readerContainer = document.querySelector('.rdr-image-wrap');
-    if (!readerContainer) {
-        return;
-    }
+    if (!readerContainer) return;
     readerContainer.innerHTML = '';
 
-    const GITHUB_RAW_URL = comicRepo;
-
-    // We assume the image format is WebP.
+    // The path is now relative to the root of the repository
+    const chapterPath = `Comics/${comicName}/${chapterName}/`;
+    
     const imageFormat = 'webp';
     const maxPagesToCheck = 100;
 
     for (let i = 1; i <= maxPagesToCheck; i++) {
         const imageNumber = String(i).padStart(2, '0');
-        const imageUrl = `${GITHUB_RAW_URL}comics/${chapterName}/${imageNumber}.${imageFormat}`;
+        const imageUrl = `${chapterPath}${imageNumber}.${imageFormat}`;
 
         try {
             const response = await fetch(imageUrl, { method: 'HEAD' });
 
             if (response.status === 200) {
-                // If the file exists, create the image element and add it to the page
                 const img = document.createElement('img');
                 img.src = imageUrl;
                 img.alt = `Chapter ${chapterName}, Page ${imageNumber}`;
                 readerContainer.appendChild(img);
             } else {
-                // If a file is not found (e.g., a 404 error), we assume we've reached the end of the chapter
                 break;
             }
         } catch (error) {
@@ -44,17 +38,20 @@ async function loadChapterImages(comicRepo, chapterName) {
     }
 }
 
-// Check the current page and execute the appropriate function
 document.addEventListener('DOMContentLoaded', () => {
     const params = getUrlParams();
-    const comicRepo = 'https://raw.githubusercontent.com/YOUR_USERNAME/my-first-comic/main/';
-    const chapterName = params.get('chapter');
+    const comicName = params.comic;
+    const chapterName = params.chapter;
     
-    if (document.title.includes('Chapter') && chapterName) {
-        const titleElement = document.querySelector('h1 a');
+    if (comicName && chapterName) {
+        const titleElement = document.getElementById('reader-title');
         if (titleElement) {
              titleElement.textContent = `Chapter ${chapterName}`;
         }
-        loadChapterImages(comicRepo, chapterName);
+        const backLink = document.getElementById('back-to-comic-link');
+        if (backLink) {
+            backLink.href = `index.html?comic=${comicName}`;
+        }
+        loadChapterImages(comicName, chapterName);
     }
 });
